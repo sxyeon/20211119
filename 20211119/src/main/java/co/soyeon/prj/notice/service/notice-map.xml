@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.soyeon.prj.notice.service.NoticeMapper">
+	<select id="noticeSelectList" resultType="co.soyeon.prj.notice.service.NoticeVO">
+		SELECT * FROM NOTICE
+	</select>
+	
+	<select id="noticeSelect" resultType="co.soyeon.prj.notice.service.NoticeVO">
+		SELECT * FROM WHERE NO = #{no}
+	</select>
+	
+	<select id="noticeSearchList" parameterType="String" resultType="co.soyeon.prj.notice.service.NoticeVO">
+		SELECT * FROM NOTICE
+		WHERE SUBJECT LIKE '%'|| #{searchKey} ||'%'
+	</select>
+	
+	<insert id="noticeInsert" parameterType="co.soyeon.prj.notice.service.NoticeVO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT MAX(NO)+1 AS NO FROM NOTICE
+		</selectKey>
+		INSERT INTO NOTICE 
+		VALUES(#{no}, #{id}, #{name}, #{wdate}, #{title}, #{subject}, #{fileName}, #{pfileName})
+	</insert>
+	
+	<update id="noticeUpdate" parameterType="co.soyeon.prj.notice.service.NoticeVO">
+		UPDATE NOTICE 
+		<set>
+			<if test="id != null">ID = #{id}</if>
+			<if test="name ! =null">NAME = #{name}</if>
+			<if test="wdate != null">WDATE = #{wdate}</if>
+			<if test="title != null">TITLE = #{title}</if>
+			<if test="subject != null">SUBJECT = #{subject}</if>
+			<if test="fileName != null">FILENAME = #{fileName}</if>
+			<if test="pfileName != null">PFILENAME = #{pfileName}</if>
+		</set>
+		WHERE NO = #{no}
+	</update>
+	
+	<delete id="noticeDelete" parameterType="co.soyeon.prj.notice.service.NoticeVO">
+		DELETE FROM NOTICE WHERE NO = #{no}
+	</delete>
+	
+</mapper>
